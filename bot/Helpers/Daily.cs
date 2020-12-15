@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static dcBot.Globals;
+
+namespace dcBot.Helpers
+{
+    public static class Daily
+    {
+        public static async Task DailyThread()
+        {
+            while (true)
+                if (DateTime.Now.Hour == DAILY_HOUR_RESET)
+                {
+                    var users = DataWrapper.HelpForTypes.GetAllDbUsers();
+                    ResetAllDaily(users);
+                    await Task.Delay(60000);
+                }
+                else
+                {
+                    await Task.Delay(20000);
+                }
+        }
+
+        private static void ResetAllDaily(IEnumerable<DbUser> users)
+        {
+            foreach (var x in users) x.Daily = true;
+        }
+    }
+}
