@@ -23,19 +23,29 @@ namespace dcBot.Cmds
             int amount)
         {
             if (BlackJack._isRunning || ctx.Member == opponent) return;
-
+            
             if (ctx.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME)
             {
-                await WrongChannel(ctx);
+                if (Globals.PrintResponseIfNotRightChannel)
+                {
+                    await WrongChannel(ctx);
+                }
+                
                 return;
             }
+
 
             if (!CheckNumber(amount))
             {
                 await WrongNumber(ctx);
                 return;
             }
-
+            
+            if (!DataWrapper.UsersH.Exists(opponent.Id))
+            {
+                await UserNotFound(ctx);
+                return;
+            }
             var user = DataWrapper.UsersH.GetUser(ctx.Member);
             if (!user.HasEnough(amount))
             {

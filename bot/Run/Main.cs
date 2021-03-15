@@ -113,7 +113,6 @@ namespace dcBot.Run
             Commands.RegisterCommands<AdminCmds>();
             Commands.RegisterCommands<NormalCmds>();
             Commands.RegisterCommands<JackpotCmds>();
-            Commands.RegisterCommands<RouletteCmds>();
             Commands.RegisterCommands<BlackJackCmds>();
             // finally, let's connect and log in
             await Client.ConnectAsync();
@@ -182,6 +181,11 @@ namespace dcBot.Run
             e.Context.Client.Logger.LogError(BotEventId,
                 $"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}",
                 DateTime.Now);
+            
+            if (e.Context.Channel.Name != Globals.BOT_CHANNEL_NAME || e.Context.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME)
+            {
+                return;
+            }
 
 
             switch (e.Exception)

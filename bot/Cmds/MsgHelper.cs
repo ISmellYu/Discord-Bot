@@ -48,7 +48,21 @@ namespace dcBot.Cmds
             embed.WithAuthor(user.Username, null, user.AvatarUrl);
             await ctx.RespondAsync("", embed: embed);
         }
-
+        
+        public static async Task UserNotFound(CommandContext ctx)
+        {
+            var user = ctx.Member;
+            var emoji = DiscordEmoji.FromName(ctx.Client, ":x:");
+            var embed = new DiscordEmbedBuilder
+            {
+                Title = "Blad",
+                Description = $"{emoji} Nie znaleziono uzytkownika",
+                Color = new DiscordColor(0xFF0000)
+            };
+            embed.WithAuthor(user.Username, null, user.AvatarUrl);
+            await ctx.RespondAsync("", embed: embed);
+        }
+        
         public static async Task AlreadyMuted(CommandContext ctx)
         {
             var user = ctx.Member;

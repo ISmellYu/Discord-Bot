@@ -21,9 +21,13 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                await WrongChannelCmd(ctx);
+                if (Globals.PrintResponseIfNotRightChannel)
+                {
+                    await WrongChannel(ctx);
+                }
                 return;
             }
+
 
             if (JackpotMain.JackpotRunning)
             {
@@ -43,9 +47,13 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                await WrongChannelCmd(ctx);
+                if (Globals.PrintResponseIfNotRightChannel)
+                {
+                    await WrongChannel(ctx);
+                }
                 return;
             }
+
 
             if (!CheckNumber(pts))
             {
