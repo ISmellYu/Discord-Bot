@@ -19,7 +19,7 @@ namespace dcBot.Run
 {
     public class Bot
     {
-        private readonly EventId BotEventId = new EventId(42, "Bot-Ex03");
+        private readonly EventId BotEventId = new(42, "Bot-Ex03");
         private DiscordClient Client { get; set; }
         public InteractivityExtension Interactivity { get; set; }
         private CommandsNextExtension Commands { get; set; }

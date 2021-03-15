@@ -16,14 +16,14 @@ namespace dcBot.Games.BlackJack
     {
         public static bool _isRunning;
         private readonly int _amount;
-        private readonly List<StandardPlayingCard> _authorDeck = new List<StandardPlayingCard>();
+        private readonly List<StandardPlayingCard> _authorDeck = new();
         private readonly StandardDeck _deck;
         private readonly DiscordEmoji _emojiHit;
         private readonly DiscordEmoji _emojiNO;
         private readonly DiscordEmoji _emojiOK;
         private readonly DiscordEmoji _emojiStand;
         private readonly DiscordMember _opponent;
-        private readonly List<StandardPlayingCard> _opponentDeck = new List<StandardPlayingCard>();
+        private readonly List<StandardPlayingCard> _opponentDeck = new();
         private int _stands;
         private string _turn = "p1";
         private readonly CommandContext ctx;
