@@ -86,7 +86,7 @@ namespace dcBot.Run
                 // default timeout for other actions to 2 minutes
                 Timeout = TimeSpan.FromMinutes(2)
             });
-
+            //Halo
             // up next, let's set up our commands
             var ccfg = new CommandsNextConfiguration
             {
