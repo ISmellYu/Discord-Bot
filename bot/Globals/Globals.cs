@@ -11,7 +11,7 @@ namespace dcBot
                 @"Server=localhost;Database=discord;Uid=bot;Pwd=YsCSh2LC;"); //We must initialize firstly to next acces db
 #else
             public static DataWrapper Db =
- new(InitializePtsDatabase(@"Server=20.52.55.98;Database=discord_debug;Uid=bot_debug;Pwd=F9TdXXzy;");
+ new(@"Server=20.52.55.98;Database=discord_debug;Uid=bot_debug;Pwd=F9TdXXzy;");
 #endif
         public static int COST_MUTE = 100;
         public static int DAILY_AMOUNT = 100;
