@@ -1,4 +1,3 @@
-using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -53,7 +52,6 @@ namespace dcBot.Helpers
 
             public static async Task<DbUser> GetUser(ulong id, CommandContext ctx)
             {
-                
                 var mem = await ctx.Guild.GetMemberAsync(id);
                 if (!Exists(id))
                     CreateUser(mem);

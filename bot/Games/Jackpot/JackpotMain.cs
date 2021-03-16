@@ -14,8 +14,8 @@ namespace dcBot.Games.Jackpot
     public class JackpotMain
     {
         public static bool JackpotRunning;
-        private static readonly List<DiscordMember> ListMembers = new List<DiscordMember>();
-        private static readonly List<string> ListTickets = new List<string>();
+        private static readonly List<DiscordMember> ListMembers = new();
+        private static readonly List<string> ListTickets = new();
         private static int _jackpotPool;
         private static bool CanBet;
 

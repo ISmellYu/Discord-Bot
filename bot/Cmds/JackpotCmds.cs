@@ -21,10 +21,7 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (Globals.PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -47,10 +44,7 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (Globals.PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 

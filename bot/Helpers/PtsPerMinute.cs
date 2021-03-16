@@ -54,7 +54,7 @@ namespace dcBot.Helpers
                             exists.Dbuser.AddPoints(2);
                             exists.SecondsOnChannel = 0;
                         }
-                        
+
                         // if (exists.Member.VoiceState.Channel.Users.Count() == 1)
                         // {
                         //     exists.SecondsOnChannelAlone += 1;
@@ -73,7 +73,7 @@ namespace dcBot.Helpers
                         _users.Add(new PtsUser(discordMember, DataWrapper.UsersH.GetUser(discordMember)));
                     }
                 }
-                
+
                 await Task.Delay(1000);
             }
         }

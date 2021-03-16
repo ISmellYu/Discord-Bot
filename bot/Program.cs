@@ -1,5 +1,4 @@
-﻿using System;
-using dcBot.Run;
+﻿using dcBot.Run;
 
 namespace dcBot
 {
@@ -9,7 +8,7 @@ namespace dcBot
         {
             //if (!Globals.Db.CheckDatabaseIntegrity()) Console.WriteLine("Someting went wrong!");
             var bt = new Bot();
-            bt.RunAsync().GetAwaiter().GetResult();    
+            bt.RunAsync().GetAwaiter().GetResult();
         }
     }
 }

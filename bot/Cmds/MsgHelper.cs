@@ -48,7 +48,7 @@ namespace dcBot.Cmds
             embed.WithAuthor(user.Username, null, user.AvatarUrl);
             await ctx.RespondAsync("", embed: embed);
         }
-        
+
         public static async Task UserNotFound(CommandContext ctx)
         {
             var user = ctx.Member;
@@ -62,7 +62,7 @@ namespace dcBot.Cmds
             embed.WithAuthor(user.Username, null, user.AvatarUrl);
             await ctx.RespondAsync("", embed: embed);
         }
-        
+
         public static async Task AlreadyMuted(CommandContext ctx)
         {
             var user = ctx.Member;

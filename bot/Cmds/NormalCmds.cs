@@ -20,10 +20,7 @@ namespace dcBot.Cmds
             if (ctx.Channel != ctx.Guild.SystemChannel && ctx.Channel.Name != ROULETTE_CHANNEL_NAME &&
                 ctx.Channel.Name != BLACKJACK_CHANNEL_NAME)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -38,7 +35,7 @@ namespace dcBot.Cmds
             embed.WithAuthor(user.Username, null, user.AvatarUrl);
             await ctx.RespondAsync("", embed: embed.Build());
         }
-        
+
         [Command("punkty")]
         [Description("Wyswietla ile mamy punktow")]
         [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
@@ -47,10 +44,7 @@ namespace dcBot.Cmds
             if (ctx.Channel != ctx.Guild.SystemChannel && ctx.Channel.Name != ROULETTE_CHANNEL_NAME &&
                 ctx.Channel.Name != BLACKJACK_CHANNEL_NAME)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -74,10 +68,7 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -93,7 +84,7 @@ namespace dcBot.Cmds
                 await UserNotFound(ctx);
                 return;
             }
-            
+
             var user = ctx.Member;
             var dbuser = DataWrapper.UsersH.GetUser(user);
             if (!dbuser.HasEnough(pts))
@@ -124,10 +115,7 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -177,10 +165,7 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
 
@@ -204,12 +189,10 @@ namespace dcBot.Cmds
         {
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
-                if (Globals.PrintResponseIfNotRightChannel)
-                {
-                    await WrongChannel(ctx);
-                }
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
+
             var users = DataWrapper.HelpForTypes.GetTopUsers();
 
             var embed = new DiscordEmbedBuilder

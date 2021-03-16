@@ -5,11 +5,14 @@ namespace dcBot
 {
     public static class Globals
     {
-        #if !DEBUG
-            public static DataWrapper Db = new(@"Server=localhost;Database=discord;Uid=bot;Pwd=YsCSh2LC;");    //We must initialize firstly to next acces db
-        #else
-            public static DataWrapper Db = new(InitializePtsDatabase(@"Server=20.52.55.98;Database=discord_debug;Uid=bot_debug;Pwd=F9TdXXzy;");
-        #endif
+#if !DEBUG
+        public static DataWrapper
+            Db = new(
+                @"Server=localhost;Database=discord;Uid=bot;Pwd=YsCSh2LC;"); //We must initialize firstly to next acces db
+#else
+            public static DataWrapper Db =
+ new(InitializePtsDatabase(@"Server=20.52.55.98;Database=discord_debug;Uid=bot_debug;Pwd=F9TdXXzy;");
+#endif
         public static int COST_MUTE = 100;
         public static int DAILY_AMOUNT = 100;
         public static int JACKPOT_SECONDS = 30;
@@ -20,6 +23,7 @@ namespace dcBot
         public static string BLACKJACK_CHANNEL_NAME = "blackjack";
         public static string ROLE_NAME = "Zwerfikowany";
         public static bool PrintResponseIfNotRightChannel = false;
+
         public static ulong ROLE_ID = 596323688341700639;
         //public static ulong ROLE_ID = 713860899626287224;
 

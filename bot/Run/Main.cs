@@ -86,7 +86,6 @@ namespace dcBot.Run
                 // default timeout for other actions to 2 minutes
                 Timeout = TimeSpan.FromMinutes(2)
             });
-            //Halo
             // up next, let's set up our commands
             var ccfg = new CommandsNextConfiguration
             {
@@ -181,11 +180,9 @@ namespace dcBot.Run
             e.Context.Client.Logger.LogError(BotEventId,
                 $"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}",
                 DateTime.Now);
-            
-            if (e.Context.Channel.Name != Globals.BOT_CHANNEL_NAME || e.Context.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME)
-            {
-                return;
-            }
+
+            if (e.Context.Channel.Name != Globals.BOT_CHANNEL_NAME ||
+                e.Context.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME) return;
 
 
             switch (e.Exception)

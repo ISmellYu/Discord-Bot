@@ -24,9 +24,9 @@ namespace dcBot.Games.BlackJack
         private readonly DiscordEmoji _emojiStand;
         private readonly DiscordMember _opponent;
         private readonly List<StandardPlayingCard> _opponentDeck = new();
+        private readonly CommandContext ctx;
         private int _stands;
         private string _turn = "p1";
-        private readonly CommandContext ctx;
 
 
         public BlackJack(CommandContext ctx, DiscordMember opponent, int amount)
