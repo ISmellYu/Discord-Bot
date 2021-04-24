@@ -19,6 +19,7 @@ namespace dcBot.Cmds
         [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
         public async Task Create(CommandContext ctx)
         {
+            if (!Globals.ENABLE_JACKPOT)    return;
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
                 if (Globals.PrintResponseIfNotRightChannel) await WrongChannel(ctx);
@@ -42,6 +43,7 @@ namespace dcBot.Cmds
         public async Task Join(CommandContext ctx, [Description("Ilosc za ile chcesz dolaczyc")]
             int pts)
         {
+            if (!Globals.ENABLE_JACKPOT)    return;
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
                 if (Globals.PrintResponseIfNotRightChannel) await WrongChannel(ctx);

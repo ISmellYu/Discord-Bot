@@ -26,6 +26,8 @@ namespace dcBot
 
         public static ulong ROLE_ID = 596323688341700639;
         //public static ulong ROLE_ID = 713860899626287224;
+        
+        public static bool ENABLE_JACKPOT = false;
 
         public static Random RND = new();
     }
