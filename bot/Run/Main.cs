@@ -19,7 +19,7 @@ namespace dcBot.Run
 {
     public class Bot
     {
-        private readonly EventId BotEventId = new(42, "Bot-Ex03");
+        private readonly EventId BotEventId = new(42, "JSZ Bot");
         private DiscordClient Client { get; set; }
         public InteractivityExtension Interactivity { get; set; }
         private CommandsNextExtension Commands { get; set; }
@@ -90,13 +90,13 @@ namespace dcBot.Run
             var ccfg = new CommandsNextConfiguration
             {
                 // let's use the string prefix defined in config.json
-                StringPrefixes = new[] {"jsz"},
+                StringPrefixes = new[] {"!"},
 
                 // enable responding in direct messages
                 EnableDms = true,
 
                 // enable mentioning the bot as a command prefix
-                EnableMentionPrefix = true
+                EnableMentionPrefix = false
             };
 
             // and hook them up
@@ -154,7 +154,7 @@ namespace dcBot.Run
             // occured in our client
             sender.Logger.LogError(BotEventId, e.Exception, "Exception occured");
 
-            File.WriteAllText("log.txt", $"{e.Exception}");
+            //File.WriteAllText("log.txt", $"{e.Exception}");
 
             // since this method is not async, let's return
             // a completed task, so that no additional work
@@ -180,10 +180,7 @@ namespace dcBot.Run
             e.Context.Client.Logger.LogError(BotEventId,
                 $"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}",
                 DateTime.Now);
-
-            if (e.Context.Channel.Name != Globals.BOT_CHANNEL_NAME ||
-                e.Context.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME) return;
-
+            
 
             switch (e.Exception)
             {
