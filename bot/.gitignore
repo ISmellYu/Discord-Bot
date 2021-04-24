@@ -584,3 +584,4 @@ cython_debug/
 obj
 bin/Debug/*
 config.json
+../.idea
