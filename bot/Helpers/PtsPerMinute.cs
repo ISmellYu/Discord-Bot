@@ -51,7 +51,7 @@ namespace dcBot.Helpers
                         exists.SecondsOnChannel += 1;
                         if (exists.SecondsOnChannel == 60 && exists.Stop == false)
                         {
-                            exists.Dbuser.AddPoints(2);
+                            exists.Dbuser.AddPoints(3);
                             exists.SecondsOnChannel = 0;
                         }
 
