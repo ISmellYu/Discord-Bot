@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 
-namespace dcBot.Helpers
+namespace bot.Utility
 {
     public static class MuteHelper
     {

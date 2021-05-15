@@ -132,6 +132,18 @@ namespace dcBot.Cmds
             await ctx.RespondAsync("", embed: embed);
         }
 
+        public static async Task MuteOff(CommandContext ctx)
+        {
+            var emoji = DiscordEmoji.FromName(ctx.Client, ":x:");
+            var embed = new DiscordEmbedBuilder
+            {
+                Title = "Nie mozna mutowac",
+                Description = $"{emoji} Aktualnie mutowanie jest wylaczone",
+                Color = new DiscordColor(0xFF0000)
+            };
+            await ctx.RespondAsync("", embed: embed);
+        }
+
         public static async Task WrongChannel(CommandContext ctx)
         {
             var emoji = DiscordEmoji.FromName(ctx.Client, ":x:");

@@ -1,11 +1,14 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using bot.Utility;
 using dcBot.Cmds;
 using dcBot.Helpers;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
@@ -39,9 +42,13 @@ namespace dcBot.Run
             var cfgjson = JsonConvert.DeserializeObject<ConfigJson>(json);
             var cfg = new DiscordConfiguration
             {
+                #if !DEBUG
                 Token = cfgjson.Token,
+                #else
+                Token = "NzEzODYxNjYwMTU4NDU5OTA0.XsmReg.BlVxz0KwTPvIw5WasXY_hvCkK14",
+                #endif
                 TokenType = TokenType.Bot,
-
+                Intents = DiscordIntents.All,
                 AutoReconnect = true,
                 MinimumLogLevel = LogLevel.Debug
             };
@@ -49,27 +56,7 @@ namespace dcBot.Run
             // then we want to instantiate our client
             Client = new DiscordClient(cfg);
 
-            // If you are on Windows 7 and using .NETFX, install 
-            // DSharpPlus.WebSocket.WebSocket4Net from NuGet,
-            // add appropriate usings, and uncomment the following
-            // line
-            //this.Client.SetWebSocketClient<WebSocket4NetClient>();
-
-            // If you are on Windows 7 and using .NET Core, install 
-            // DSharpPlus.WebSocket.WebSocket4NetCore from NuGet,
-            // add appropriate usings, and uncomment the following
-            // line
-            //this.Client.SetWebSocketClient<WebSocket4NetCoreClient>();
-
-            // If you are using Mono, install 
-            // DSharpPlus.WebSocket.WebSocketSharp from NuGet,
-            // add appropriate usings, and uncomment the following
-            // line
-            //this.Client.SetWebSocketClient<WebSocketSharpClient>();
-
-            // if using any alternate socket client implementations, 
-            // remember to add the following to the top of this file:
-            //using DSharpPlus.Net.WebSocket;
+            
 
             // next, let's hook some events, so we know
             // what's going on
@@ -123,10 +110,8 @@ namespace dcBot.Run
 
             // Run reset daily thread
             Task.Run(() => Daily.DailyThread());
-
             //Run ptsperminute
             Task.Run(() => new PtsPerMinute(Client).MainThread());
-
             // and this is to prevent premature quitting
             await Task.Delay(-1);
         }

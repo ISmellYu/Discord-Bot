@@ -1,5 +1,6 @@
 using System;
 using dcBot.Helpers;
+using DSharpPlus.Entities;
 
 namespace dcBot
 {
@@ -14,6 +15,7 @@ namespace dcBot
  new(@"Server=20.52.55.98;Database=discord_debug;Uid=bot_debug;Pwd=F9TdXXzy;");
 #endif
         public static int COST_MUTE = 100;
+        public static int COST_MOVE = 500;
         public static int DAILY_AMOUNT = 100;
         public static int JACKPOT_SECONDS = 30;
         public static int DAILY_HOUR_RESET = 0;
@@ -27,8 +29,12 @@ namespace dcBot
         public static ulong ROLE_ID = 596323688341700639;
         //public static ulong ROLE_ID = 713860899626287224;
         
-        public static bool ENABLE_JACKPOT = false;
+        public static bool ENABLE_JACKPOT = true;
+        public static bool ENABLE_MUTE = true;
+        public static bool ENABLE_MOVING = false;
 
         public static Random RND = new();
+
+        
     }
 }

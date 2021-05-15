@@ -73,6 +73,7 @@ namespace dcBot.Games.Jackpot
             JackpotRunning = false;
             ListMembers.Clear();
             ListTickets.Clear();
+            _jackpotPool = 0;
         }
 
         private static DiscordMember RollWinner()
@@ -118,7 +119,7 @@ namespace dcBot.Games.Jackpot
             }
 
             dbuser.RemovePoints(pts);
-            _jackpotPool += pts;
+             _jackpotPool += pts;
             var id = ctx.Member.Id.ToString();
             if (!ListMembers.Contains(ctx.Member)) ListMembers.Add(ctx.Member);
 
@@ -154,7 +155,7 @@ namespace dcBot.Games.Jackpot
             var emoji = DiscordEmoji.FromName(ctx.Client, ":game_die:");
             var embed = new DiscordEmbedBuilder
             {
-                Title = "Dolaczyles do jackopta!",
+                Title = "Dolaczyles do jackpota!",
                 Description = $"{emoji} {ctx.Member.Mention} dolaczyl do jackopta stawiajac: __**{pts}**__",
                 Color = new DiscordColor(0x34eb46)
             };

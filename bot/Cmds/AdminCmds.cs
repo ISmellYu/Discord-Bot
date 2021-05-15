@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using dcBot.Helpers;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -10,7 +11,7 @@ namespace dcBot.Cmds
 {
     [Group("admin")]
     [Description("Komendy admina")]
-    [RequireOwner]
+    [RequireUserPermissions(Permissions.Administrator)]
     public class AdminCmds : BaseCommandModule
     {
         [Command("reset")]
@@ -115,6 +116,37 @@ namespace dcBot.Cmds
             };
             await ctx.RespondAsync("", embed: embed);
             Environment.Exit(1);
+        }
+
+        [Command("mute")]
+        [Description("Przelacza wlaczenie/wylaczenie mutowania")]
+        public async Task TurnMuteOnOff(CommandContext ctx)
+        {
+            Globals.ENABLE_MUTE = !Globals.ENABLE_MUTE;
+            if (Globals.ENABLE_MUTE)
+            {
+                var emoji = DiscordEmoji.FromName(ctx.Client, ":on:");
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Title = "Wylaczanie bota",
+                    Description = $"{emoji} Mutowanie zostalo wlaczone",
+                    Color = new DiscordColor(0x03fce8)
+                };
+                await ctx.RespondAsync("", embed: embed);
+            }
+            else
+            {
+                var emoji = DiscordEmoji.FromName(ctx.Client, ":off:");
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Title = "Wylaczanie mutowania",
+                    Description = $"{emoji} Mutowanie zostalo wylaczone",
+                    Color = new DiscordColor(0x03fce8)
+                };
+                await ctx.RespondAsync("", embed: embed);
+            }
         }
     }
 }

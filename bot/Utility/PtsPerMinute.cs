@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using dcBot.Helpers;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using static dcBot.Globals;
 
-namespace dcBot.Helpers
+namespace bot.Utility
 {
     public class PtsPerMinute
     {

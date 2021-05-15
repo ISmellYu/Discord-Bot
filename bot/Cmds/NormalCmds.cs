@@ -5,7 +5,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using static dcBot.Cmds.MsgHelper;
 using static dcBot.Globals;
-using static dcBot.Helpers.MuteHelper;
+using static bot.Utility.MuteHelper;
 
 namespace dcBot.Cmds
 {
@@ -113,6 +113,19 @@ namespace dcBot.Cmds
         public async Task Mute(CommandContext ctx, [Description("Uzytkownik")] DiscordMember ent,
             [Description("Minuty")] int minutes)
         {
+            if (!ENABLE_MUTE)
+            {
+                var emoji = DiscordEmoji.FromName(ctx.Client, ":x:");
+                var embed = new DiscordEmbedBuilder
+                {
+                    Title = "Nie mozna wyciszyc",
+                    Description = $"{emoji} Podany uzytkownik znajduje sie na kanale AFK",
+                    Color = new DiscordColor(0xFF0000)
+                };
+                await ctx.RespondAsync("", embed: embed);
+                return;
+            }
+            
             if (ctx.Channel != ctx.Guild.SystemChannel)
             {
                 if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
@@ -154,7 +167,7 @@ namespace dcBot.Cmds
             }
 
             dbuser.RemovePoints(pts_to_pay);
-            await Muting(ctx, user.Mention, ent.Mention, minutes);
+            Muting(ctx, user.Mention, ent.Mention, minutes);
             await MuteThread(ent, minutes * 60, ctx.Guild.AfkChannel);
         }
 
@@ -202,6 +215,33 @@ namespace dcBot.Cmds
 
             for (var i = 0; i < users.Length; i++) embed.AddField($"{i + 1}", $"{users[i].User} - `{users[i].Amount}`");
             await ctx.RespondAsync("", embed: embed);
+        }
+
+        [Command("przenies")]
+        [Description("Prznies uzytkownika na inny kanal")]
+        [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
+        public async Task Move(CommandContext ctx, [Description("Uzytkownik")] DiscordMember ent,
+            [Description("Kanal")] DiscordChannel channel)
+        {
+            if (!Globals.ENABLE_MOVING)
+            {
+                return;
+            }
+            var chnl = ent.VoiceState?.Channel;
+            if (chnl == null)
+            {
+                await NotOnChannel(ctx);
+                return;
+            }
+            var user = DataWrapper.UsersH.GetUser(ctx.Member);
+            if (!user.HasEnough(COST_MOVE))
+            {
+                await NotEnoughPts(ctx);
+                return;
+            }
+            
+            
+            
         }
     }
 }

@@ -61,7 +61,7 @@ namespace dcBot.Games.BlackJack
         {
             await DrawStarterCards();
 
-            if (await CheckIfWin())
+            if (CheckIfWin())
             {
                 await EndBoard();
                 await WinMessage();
@@ -78,7 +78,7 @@ namespace dcBot.Games.BlackJack
 
 
             _turn = "p2";
-            if (await CheckIfWin())
+            if (CheckIfWin())
             {
                 await EndBoard();
                 await WinMessage();
@@ -140,7 +140,7 @@ namespace dcBot.Games.BlackJack
 
                                 _authorDeck.Add(card);
 
-                                if (await CheckIfWin())
+                                if (CheckIfWin())
                                 {
                                     await EndBoard();
                                     await WinMessage();
@@ -202,7 +202,7 @@ namespace dcBot.Games.BlackJack
 
                                 _opponentDeck.Add(card);
 
-                                if (await CheckIfWin())
+                                if (CheckIfWin())
                                 {
                                     await EndBoard();
                                     await WinMessage();
@@ -277,8 +277,8 @@ namespace dcBot.Games.BlackJack
                 return false;
             }
 
-            var DbOpponent = DataWrapper.UsersH.GetUser(_opponent);
-            if (!DbOpponent.HasEnough(_amount))
+            var dbOpponent = DataWrapper.UsersH.GetUser(_opponent);
+            if (!dbOpponent.HasEnough(_amount))
             {
                 await MsgHelper.NotEnoughPts(ctx, _opponent);
                 DbAuthor.AddPoints(_amount);
@@ -286,7 +286,7 @@ namespace dcBot.Games.BlackJack
             }
 
             await OpponentAccepted();
-            DbOpponent.RemovePoints(_amount);
+            dbOpponent.RemovePoints(_amount);
             return true;
         }
 
@@ -442,7 +442,7 @@ namespace dcBot.Games.BlackJack
             }
         }
 
-        private async Task<bool> CheckIfWin()
+        private bool CheckIfWin()
         {
             if (_turn == "p1")
             {
