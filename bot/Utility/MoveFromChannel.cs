@@ -6,7 +6,7 @@ namespace bot.Utility
     {
         public static async void MoveThread(DiscordMember mem, DiscordChannel channel)
         {
-            await mem.PlaceInAsync(channel);
+            await mem.PlaceInAsync(channel).ConfigureAwait(false);
         }
     }
 }

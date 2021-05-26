@@ -1,4 +1,5 @@
 using System;
+using dcBot.Games;
 using dcBot.Helpers;
 using DSharpPlus.Entities;
 
@@ -35,6 +36,8 @@ namespace dcBot
 
         public static Random RND = new();
 
-        
+        public static BetSystem BetsGlobal = new();
+
+
     }
 }

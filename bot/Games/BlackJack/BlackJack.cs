@@ -95,6 +95,7 @@ namespace dcBot.Games.BlackJack
 
             _turn = Globals.RND.Next(2) == 0 ? "p1" : "p2";
             while (true)
+            {
                 switch (_turn)
                 {
                     case "p1":
@@ -220,6 +221,7 @@ namespace dcBot.Games.BlackJack
                         break;
                     }
                 }
+            }
         }
 
         private async Task DrawStarterCards()

@@ -37,7 +37,7 @@ namespace dcBot.Cmds
         }
 
         [Command("punkty")]
-        [Description("Wyswietla ile mamy punktow")]
+        [Description("Wyswietla ile ktos ma punktow")]
         [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
         public async Task ShowPts(CommandContext ctx, [Description("Uzytkownik")] DiscordMember member)
         {
@@ -48,7 +48,7 @@ namespace dcBot.Cmds
                 return;
             }
 
-            var user = ctx.Member;
+            var user = member;
 
             var embed = new DiscordEmbedBuilder
             {

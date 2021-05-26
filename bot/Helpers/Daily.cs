@@ -10,6 +10,7 @@ namespace dcBot.Helpers
         public static async Task DailyThread()
         {
             while (true)
+            {
                 if (DateTime.Now.Hour == DAILY_HOUR_RESET)
                 {
                     var users = DataWrapper.HelpForTypes.GetAllDbUsers();
@@ -20,6 +21,7 @@ namespace dcBot.Helpers
                 {
                     await Task.Delay(20000); // 20 seconds
                 }
+            }
         }
 
         private static void ResetAllDaily(IEnumerable<DbUser> users)

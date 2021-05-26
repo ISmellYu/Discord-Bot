@@ -119,7 +119,7 @@ namespace dcBot.Helpers
             public static void DecrementPts(ulong id, int pts)
             {
                 using var conn = new MySqlConnection(_connectionString);
-                conn.Execute(@"UPDATE DbUser SET amount=amount-@pts WHERE ID=@ID", new {pts, id});
+                conn.Execute("UPDATE DbUser SET amount=amount-@pts WHERE ID=@ID", new {pts, id});
             }
 
             public static DbUser[] GetAllDbUsers()
@@ -133,6 +133,11 @@ namespace dcBot.Helpers
                 using var conn = new MySqlConnection(_connectionString);
                 return GetAllDbUsers().OrderByDescending(p => p.Amount).Take(5).ToArray();
             }
+        }
+
+        public static class HelpForBets
+        {
+            
         }
     }
 }
