@@ -29,7 +29,7 @@ namespace bot.Utility
             while (true)
             {
                 var voiceClients = GetAllVoiceClients().ToArray();
-                if (!voiceClients.Any())
+                if (voiceClients.Length == 0)
                 {
                     _users.Clear();
                     await Task.Delay(1000);
@@ -49,10 +49,10 @@ namespace bot.Utility
                     var exists = _users.SingleOrDefault(p => p.Member == discordMember);
                     if (exists != null)
                     {
-                        exists.SecondsOnChannel += 1;
-                        if (exists.SecondsOnChannel == 60 && exists.Stop == false)
+                        exists.SecondsOnChannel++;
+                        if (exists.SecondsOnChannel == 60 && !exists.Stop)
                         {
-                            exists.Dbuser.AddPoints(3);
+                            exists.Dbuser.AddPoints(exists.Member.Roles.Any(p=> p.Name == ROLE_BOOSTER) ? 4 : 3);
                             exists.SecondsOnChannel = 0;
                         }
 

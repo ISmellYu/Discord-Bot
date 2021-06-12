@@ -35,9 +35,7 @@ namespace dcBot.Games
         {
             public string Name { get; }
             private List<string> _options;
-
             public IReadOnlyList<string> Options => _options;
-
             private Dictionary<string, double> Odds
             {
                 get
@@ -45,9 +43,7 @@ namespace dcBot.Games
                     return new Dictionary<string, double>();
                 }
             }
-            
             public List<IndividualBet> Players { get; set; }
-
             public Bet(string name, List<string> options)
             {
                 Name = name;
@@ -66,7 +62,6 @@ namespace dcBot.Games
             public DiscordMember User { get; init; }
             public string Option { get; init; }
             public int Amount { get; set; }
-            
         }
     }
 }

@@ -25,6 +25,7 @@ namespace dcBot
         public static string BOT_CHANNEL_NAME = "boty";
         public static string BLACKJACK_CHANNEL_NAME = "blackjack";
         public static string ROLE_NAME = "Zwerfikowany";
+        public static string ROLE_BOOSTER = "Koksy";
         public static bool PrintResponseIfNotRightChannel = false;
 
         public static ulong ROLE_ID = 596323688341700639;
