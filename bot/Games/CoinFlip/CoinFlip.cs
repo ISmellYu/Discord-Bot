@@ -1,7 +1,7 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 
-namespace dcBot.Games.CoinFlip
+namespace bot.Games.CoinFlip
 {
     public class CoinFlip
     {

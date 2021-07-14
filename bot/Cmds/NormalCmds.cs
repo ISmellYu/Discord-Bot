@@ -1,18 +1,19 @@
 using System.Threading.Tasks;
-using dcBot.Helpers;
+using bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using static dcBot.Cmds.MsgHelper;
-using static dcBot.Globals;
+using static bot.Cmds.MsgHelper;
+using static bot.Globals;
 using static bot.Utility.MuteHelper;
 
-namespace dcBot.Cmds
+namespace bot.Cmds
 {
     [Cooldown(1, 1, CooldownBucketType.User)]
     public class NormalCmds : BaseCommandModule
     {
         [Command("punkty")]
+        [Aliases("pkt")]
         [Description("Wyswietla ile mamy punktow")]
         [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
         public async Task ShowPts(CommandContext ctx)
@@ -213,8 +214,36 @@ namespace dcBot.Cmds
                 Title = "Ranking punktow"
             };
 
-            for (var i = 0; i < users.Length; i++) embed.AddField($"{i + 1}", $"{users[i].User} - `{users[i].Amount}`");
+            for (var i = 0; i < users.Length; i++)
+            {
+                var username = await ctx.Guild.GetMemberAsync(users[i].ID).ConfigureAwait(false);
+                embed.AddField($"{i + 1}", $"{username} - `{users[i].Amount}`");
+            }
+                
             await ctx.RespondAsync("", embed: embed);
+        }
+        
+        [Command("rank")]
+        [Description("Pokazuje ranking uzytkownika")]
+        [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
+        public async Task CheckRank(CommandContext ctx)
+        {
+            if (ctx.Channel != ctx.Guild.SystemChannel)
+            {
+                if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
+                return;
+            }
+            
+            var emoji = DiscordEmoji.FromName(ctx.Client, ":crown:");
+            var user = ctx.Member;
+            var embed = new DiscordEmbedBuilder
+            {
+                Title = "Miejsce w rankingu",
+                Description = $"{emoji} {user.Mention} w rankingu jest na miejscu {DataWrapper.HelpForTypes.GetPlaceForUser(user)}",
+                Color = new DiscordColor(0x228B22)
+            };
+            embed.WithAuthor(user.Username, null, user.AvatarUrl);
+            await ctx.RespondAsync("", embed: embed.Build());
         }
 
         [Command("przenies")]
@@ -242,6 +271,14 @@ namespace dcBot.Cmds
             
             
             
+        }
+
+        [Command("ping")]
+        [Description("Pinguj bota")]
+        [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
+        public async Task Ping(CommandContext ctx)
+        {
+            await ctx.RespondAsync($"Pong: {ctx.Client.Ping}");
         }
     }
 }

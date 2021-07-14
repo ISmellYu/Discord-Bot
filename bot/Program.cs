@@ -1,6 +1,6 @@
-﻿using dcBot.Run;
+﻿using bot.Run;
 
-namespace dcBot
+namespace bot
 {
     internal static class Program
     {

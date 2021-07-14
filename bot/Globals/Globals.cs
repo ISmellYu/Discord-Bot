@@ -1,9 +1,9 @@
 using System;
-using dcBot.Games;
-using dcBot.Helpers;
+using bot.Games;
+using bot.Helpers;
 using DSharpPlus.Entities;
 
-namespace dcBot
+namespace bot
 {
     public static class Globals
     {

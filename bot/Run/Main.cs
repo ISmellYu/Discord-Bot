@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using bot.Utility;
-using dcBot.Cmds;
-using dcBot.Helpers;
+using bot.Cmds;
+using bot.Helpers;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -18,7 +18,7 @@ using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace dcBot.Run
+namespace bot.Run
 {
     public class Bot
     {

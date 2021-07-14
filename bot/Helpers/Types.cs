@@ -1,7 +1,7 @@
 using Dapper.Contrib.Extensions;
 using Newtonsoft.Json;
 
-namespace dcBot.Helpers
+namespace bot.Helpers
 {
     public struct ConfigJson
     {

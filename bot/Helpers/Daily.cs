@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static dcBot.Globals;
+using static bot.Globals;
 
-namespace dcBot.Helpers
+namespace bot.Helpers
 {
     public static class Daily
     {

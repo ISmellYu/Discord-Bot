@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DSharpPlus.Entities;
 
-namespace dcBot.Games
+namespace bot.Games
 {
     public class BetSystem
     {

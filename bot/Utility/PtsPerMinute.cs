@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using dcBot.Helpers;
+using bot.Helpers;
 using DSharpPlus;
 using DSharpPlus.Entities;
-using static dcBot.Globals;
+using static bot.Globals;
 
 namespace bot.Utility
 {

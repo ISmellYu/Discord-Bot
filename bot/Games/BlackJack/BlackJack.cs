@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using dcBot.Cmds;
-using dcBot.Helpers;
+using bot.Cmds;
+using bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.Extensions;
 using NetDeck.Cards;
 using NetDeck.Decks;
 
-namespace dcBot.Games.BlackJack
+namespace bot.Games.BlackJack
 {
     public class BlackJack
     {

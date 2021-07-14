@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
-using dcBot.Games.BlackJack;
-using dcBot.Helpers;
+using bot.Games.BlackJack;
+using bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using static dcBot.Cmds.MsgHelper;
+using static bot.Cmds.MsgHelper;
 
-namespace dcBot.Cmds
+namespace bot.Cmds
 {
     [Group("blackjack")]
     [Description("Komendy do blacjacka")]

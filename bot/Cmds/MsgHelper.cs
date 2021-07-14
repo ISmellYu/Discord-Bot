@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 
-namespace dcBot.Cmds
+namespace bot.Cmds
 {
     public static class MsgHelper
     {

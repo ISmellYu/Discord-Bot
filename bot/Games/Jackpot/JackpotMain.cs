@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using dcBot.Cmds;
-using dcBot.Helpers;
+using bot.Cmds;
+using bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
-using static dcBot.Globals;
+using static bot.Globals;
 
 
-namespace dcBot.Games.Jackpot
+namespace bot.Games.Jackpot
 {
     public class JackpotMain
     {

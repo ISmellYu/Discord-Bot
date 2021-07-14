@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using dcBot.Games.Jackpot;
-using dcBot.Helpers;
+using bot.Games.Jackpot;
+using bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using static dcBot.Cmds.MsgHelper;
+using static bot.Cmds.MsgHelper;
 
-namespace dcBot.Cmds
+namespace bot.Cmds
 {
     [Group("jackpot")]
     [Description("Komendy do jackopta")]

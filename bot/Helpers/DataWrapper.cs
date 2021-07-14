@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -6,7 +7,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using MySqlConnector;
 
-namespace dcBot.Helpers
+namespace bot.Helpers
 {
     public class DataWrapper
     {
@@ -83,7 +84,7 @@ namespace dcBot.Helpers
                 CreateUser(us.Id, us.Username);
             }
         }
-
+        
         public static class HelpForTypes
         {
             public static bool GetDaily(ulong id)
@@ -132,6 +133,40 @@ namespace dcBot.Helpers
             {
                 using var conn = new MySqlConnection(_connectionString);
                 return GetAllDbUsers().OrderByDescending(p => p.Amount).Take(5).ToArray();
+            }
+            
+            public static int GetPlaceForUser(DiscordMember user)
+            {
+                var totalWatch = System.Diagnostics.Stopwatch.StartNew();
+                
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                using var conn = new MySqlConnection(_connectionString);
+                watch.Stop();
+                Console.WriteLine($"Opening database connection takes {watch.ElapsedMilliseconds} ms");
+
+                var watch1 = System.Diagnostics.Stopwatch.StartNew();
+                var users = GetAllDbUsers();
+                watch1.Stop();
+                Console.WriteLine($"Getting all users takes {watch1.ElapsedMilliseconds} ms");
+                
+                var watch2 = System.Diagnostics.Stopwatch.StartNew();
+                var ordered = users.OrderByDescending(p => p.Amount);
+                watch2.Stop();
+                Console.WriteLine($"Ordering takes {watch2.ElapsedMilliseconds} ms");
+                
+                var watch3 = System.Diagnostics.Stopwatch.StartNew();
+                var listed = ordered.ToList();
+                watch3.Stop();
+                Console.WriteLine($"Converting to list takes {watch3.ElapsedMilliseconds} ms");
+                
+                var watch4 = System.Diagnostics.Stopwatch.StartNew();
+                var index = listed.FindIndex(p => p.ID == user.Id) + 1;
+                watch4.Stop();
+                Console.WriteLine($"Finding index takes {watch4.ElapsedMilliseconds} ms");
+                
+                totalWatch.Stop();
+                Console.WriteLine($"Whole function takes {totalWatch.ElapsedMilliseconds} ms");
+                return index;
             }
         }
 
