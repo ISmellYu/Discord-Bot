@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using bot.Cmds;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.Extensions;
@@ -254,7 +255,8 @@ namespace bot.Games.BlackJack
 
         private async Task<bool> SendMsgReact()
         {
-            var DbAuthor = DataWrapper.UsersH.GetUser(ctx.Member);
+            await using var context = new DiscordContext();
+            var DbAuthor = context.Users.GetUserByDiscordMember(ctx.Member);
             var msg = await StartMessage();
 
             var interactivity = ctx.Client.GetInteractivity();
@@ -269,6 +271,7 @@ namespace bot.Games.BlackJack
                 {
                     await OpponentDeclined();
                     DbAuthor.AddPoints(_amount);
+                    await context.SaveChangesAsync().ConfigureAwait(false);
                     return false;
                 }
             }
@@ -276,19 +279,22 @@ namespace bot.Games.BlackJack
             {
                 await OpponentNotJoined();
                 DbAuthor.AddPoints(_amount);
+                await context.SaveChangesAsync().ConfigureAwait(false);
                 return false;
             }
 
-            var dbOpponent = DataWrapper.UsersH.GetUser(_opponent);
+            var dbOpponent = context.Users.GetUserByDiscordMember(_opponent);
             if (!dbOpponent.HasEnough(_amount))
             {
                 await MsgHelper.NotEnoughPts(ctx, _opponent);
                 DbAuthor.AddPoints(_amount);
+                await context.SaveChangesAsync().ConfigureAwait(false);
                 return false;
             }
 
             await OpponentAccepted();
             dbOpponent.RemovePoints(_amount);
+            await context.SaveChangesAsync().ConfigureAwait(false);
             return true;
         }
 
@@ -320,8 +326,12 @@ namespace bot.Games.BlackJack
             };
             await ctx.RespondAsync("", embed: embed.Build());
 
-            DataWrapper.UsersH.GetUser(ctx.Member).AddPoints(_amount);
-            DataWrapper.UsersH.GetUser(_opponent).AddPoints(_amount);
+            await using (var context = new DiscordContext())
+            {
+                context.Users.GetUserByDiscordMember(ctx.Member).AddPoints(_amount);
+                context.Users.GetUserByDiscordMember(_opponent).AddPoints(_amount);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
 
         private async Task WinMessage()
@@ -337,7 +347,9 @@ namespace bot.Games.BlackJack
                 _turn == "p1" ? ctx.User.AvatarUrl : _opponent.AvatarUrl);
             await ctx.RespondAsync("", embed: embed.Build());
 
-            DataWrapper.UsersH.GetUser(_turn == "p1" ? ctx.Member : _opponent).AddPoints(_amount * 2);
+            await using var context = new DiscordContext();
+            context.Users.GetUserByDiscordMember(_turn == "p1" ? ctx.Member : _opponent).AddPoints(_amount * 2);
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         private async Task OpponentNotJoined()

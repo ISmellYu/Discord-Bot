@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using bot.Games.Jackpot;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using static bot.Cmds.MsgHelper;
@@ -63,14 +64,17 @@ namespace bot.Cmds
                 return;
             }
 
-            var dbuser = DataWrapper.UsersH.GetUser(ctx.Member);
-            if (!dbuser.HasEnough(pts))
+            await using (var context = new DiscordContext())
             {
-                await NotEnoughPts(ctx);
-                return;
+                var dbUser = context.Users.GetUserByDiscordMember(ctx.Member);
+                if (!dbUser.HasEnough(pts))
+                {
+                    await NotEnoughPts(ctx);
+                    return;
+                }
             }
-
-            JackpotMain.JoinJackpot(ctx, dbuser, pts);
+            
+            JackpotMain.JoinJackpot(ctx, pts);
         }
     }
 }

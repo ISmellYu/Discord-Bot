@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using bot.Cmds;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using static bot.Globals;
@@ -51,7 +52,14 @@ namespace bot.Games.Jackpot
                 return;
             }
 
-            DataWrapper.UsersH.GetUser(winner).AddPoints(_jackpotPool);
+            await using (var context = new DiscordContext())
+            {
+                context.Users.GetUserByDiscordMember(winner).AddPoints(_jackpotPool);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+            
+            
+            //DataWrapper.UsersH.GetUser(winner).AddPoints(_jackpotPool);
             await DisplayWinner(winner);
             ResetJackpot();
         }
@@ -110,7 +118,7 @@ namespace bot.Games.Jackpot
             await ctx.RespondAsync("", embed: embed);
         }
 
-        public static async Task JoinJackpot(CommandContext ctx, DbUser dbuser, int pts)
+        public static async Task JoinJackpot(CommandContext ctx, int pts)
         {
             if (!CanBet)
             {
@@ -118,8 +126,13 @@ namespace bot.Games.Jackpot
                 return;
             }
 
-            dbuser.RemovePoints(pts);
-             _jackpotPool += pts;
+            await using (var context = new DiscordContext())
+            {
+                context.Users.GetUserByDiscordMember(ctx.Member).RemovePoints(pts);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+            
+            _jackpotPool += pts;
             var id = ctx.Member.Id.ToString();
             if (!ListMembers.Contains(ctx.Member)) ListMembers.Add(ctx.Member);
 

@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using static bot.Globals;
@@ -12,9 +14,9 @@ namespace bot.Utility
     public class PtsPerMinute
     {
         public static bool IsRunning = false;
-        private readonly DiscordGuild _guild;
+        private static DiscordGuild _guild;
         private readonly DiscordRole _role;
-        private readonly List<PtsUser> _users = new();
+        private readonly List<VoiceUser> _voiceUsers = new();
 
         public PtsPerMinute(BaseDiscordClient client)
         {
@@ -28,50 +30,26 @@ namespace bot.Utility
         {
             while (true)
             {
-                var voiceClients = GetAllVoiceClients().ToArray();
-                if (voiceClients.Length == 0)
+                var voiceClients = GetAllVoiceClients();
+
+                if (!voiceClients.Any())
                 {
-                    _users.Clear();
-                    await Task.Delay(1000);
+                    CleanUpAndDelay(5000);
                     continue;
                 }
 
-                //Remove users that quited channel
-                for (var i = 0; i < _users.Count; i++)
+                foreach (var member in voiceClients)
                 {
-                    var chnl = _users[i].Member.VoiceState?.Channel;
-                    if (chnl == null || chnl == _guild.AfkChannel) _users.RemoveAt(i);
-                }
+                    var voiceUser = _voiceUsers.SingleOrDefault(p => p.Id == member.Id);
 
-
-                foreach (var discordMember in voiceClients)
-                {
-                    var exists = _users.SingleOrDefault(p => p.Member == discordMember);
-                    if (exists != null)
+                    if (voiceUser != null)
                     {
-                        exists.SecondsOnChannel++;
-                        if (exists.SecondsOnChannel == 60 && !exists.Stop)
-                        {
-                            exists.Dbuser.AddPoints(exists.Member.Roles.Any(p=> p.Name == ROLE_BOOSTER) ? 4 : 3);
-                            exists.SecondsOnChannel = 0;
-                        }
-
-                        // if (exists.Member.VoiceState.Channel.Users.Count() == 1)
-                        // {
-                        //     exists.SecondsOnChannelAlone += 1;
-                        //     if (exists.SecondsOnChannelAlone % 600 != 0) continue;
-                        //     exists.Stop = true;
-                        // }
-                        // else
-                        // {
-                        //     exists.SecondsOnChannelAlone = 0;
-                        //
-                        //     exists.Stop = false;
-                        // }
+                        IncrementSecondsAndAddPointsIfNeeded(PTS_PER_MINUTE_INTERVAL_SECONDS, PTS_PER_MINUTE_AMOUNT,
+                            PTS_PER_MINUTE_AMOUNT_BOOSTER, member, voiceUser);
                     }
                     else
                     {
-                        _users.Add(new PtsUser(discordMember, DataWrapper.UsersH.GetUser(discordMember)));
+                        _voiceUsers.Add(new VoiceUser(member.Id));
                     }
                 }
 
@@ -85,21 +63,53 @@ namespace bot.Utility
                 .SelectMany(client => client.Users).Where(p => p.Roles.Contains(_role) && !p.IsBot);
         }
 
-        private class PtsUser
+        private async void CleanUpAndDelay(int delay)
         {
-            public readonly DbUser Dbuser;
-            public readonly DiscordMember Member;
-            public int SecondsOnChannel;
-            public int SecondsOnChannelAlone;
-            public bool Stop;
+            _voiceUsers.Clear();
+            await Task.Delay(delay);
+        }
+    
+        private async void IncrementSecondsAndAddPointsIfNeeded(int intervalSeconds, int pointsToAdd, 
+            int pointsToAddBooster, DiscordMember member, VoiceUser user)
+        {
+            user.IncrementSeconds(1);
+            if (user.Seconds % intervalSeconds != 0) return;
+            await using var context = new DiscordContext();
+            var dbUser = context.Users.GetUserByUlong(user.Id);
+            var isBooster = member.PremiumSince != null;
+            dbUser.AddPoints(isBooster ? pointsToAddBooster : pointsToAdd);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
 
-            public PtsUser(DiscordMember user2, DbUser user)
+        private class VoiceUser
+        {
+            public ulong Id { get; set; }
+            public int Seconds { get; set; } = 0;
+
+            public VoiceUser(ulong id)
             {
-                Dbuser = user;
-                Member = user2;
-                SecondsOnChannel = 0;
-                SecondsOnChannelAlone = 0;
+                Id = id;
+            }
+
+            public void IncrementSeconds(int seconds)
+            {
+                Seconds += seconds;
+            }
+
+            public async Task<bool> IsOnChannelAndNotMuted()
+            {
+                var member = await _guild.GetMemberAsync(Id).ConfigureAwait(false);
+                try
+                {
+                    var vs = member.VoiceState;
+                    return !vs.IsSelfDeafened || !vs.IsSelfMuted;
+                }
+                catch (NullReferenceException)
+                {
+                    return false;
+                }
             }
         }
+        
     }
 }

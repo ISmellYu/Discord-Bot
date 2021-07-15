@@ -1,5 +1,8 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -26,10 +29,13 @@ namespace bot.Cmds
             }
 
             var user = ctx.Member;
-
+            
+            await using var context = new DiscordContext();
+            
             var embed = new DiscordEmbedBuilder
             {
-                Description = $"Punkty {user.Mention} wynosza\n**`{DataWrapper.UsersH.GetUser(user).Amount}`**",
+                Description = $"Punkty {user.Mention} wynosza\n**`" +
+                              $"{context.Users.GetUserByDiscordMember(user).Points}`**",
                 Color = new DiscordColor(0x03fce8)
             };
             embed.WithThumbnail(user.AvatarUrl, 10, 10);
@@ -51,9 +57,12 @@ namespace bot.Cmds
 
             var user = member;
 
+            await using var context = new DiscordContext();
+            
             var embed = new DiscordEmbedBuilder
             {
-                Description = $"Punkty {user.Mention} wynosza\n**`{DataWrapper.UsersH.GetUser(user).Amount}`**",
+                Description = $"Punkty {user.Mention} wynosza\n**`" +
+                              $"{context.Users.GetUserByDiscordMember(user).Points}`**",
                 Color = new DiscordColor(0x03fce8)
             };
             embed.WithThumbnail(user.AvatarUrl, 10, 10);
@@ -79,15 +88,16 @@ namespace bot.Cmds
                 return;
             }
 
-
-            if (!DataWrapper.UsersH.Exists(ent.Id))
+            await using var context = new DiscordContext();
+            if (!context.Users.CheckIfExists(ent))
             {
                 await UserNotFound(ctx);
                 return;
             }
 
             var user = ctx.Member;
-            var dbuser = DataWrapper.UsersH.GetUser(user);
+            
+            var dbuser = context.Users.SingleOrDefault(p => p.DiscordId == (long) user.Id);
             if (!dbuser.HasEnough(pts))
             {
                 await NotEnoughPts(ctx);
@@ -95,7 +105,8 @@ namespace bot.Cmds
             }
 
             dbuser.RemovePoints(pts);
-            DataWrapper.UsersH.GetUser(ent).AddPoints(pts);
+            context.Users.SingleOrDefault(p => p.DiscordId == (long) ent.Id).AddPoints(pts);
+            await context.SaveChangesAsync().ConfigureAwait(false);
 
             var emoji = DiscordEmoji.FromName(ctx.Client, ":dollar:");
             var embed = new DiscordEmbedBuilder
@@ -153,21 +164,25 @@ namespace bot.Cmds
             }
 
             var user = ctx.Member;
-            var dbuser = DataWrapper.UsersH.GetUser(user);
-            var pts_to_pay = minutes * COST_MUTE;
-            if (!dbuser.HasEnough(pts_to_pay))
+            await using (var context = new DiscordContext())
             {
-                await NotEnoughPts(ctx);
-                return;
-            }
+                var dbuser = context.Users.SingleOrDefault(p => p.DiscordId == (long) user.Id);
+                var pts_to_pay = minutes * COST_MUTE;
+                if (!dbuser.HasEnough(pts_to_pay))
+                {
+                    await NotEnoughPts(ctx);
+                    return;
+                }
 
-            if (chnl == ctx.Guild.AfkChannel)
-            {
-                await WrongChannel(ctx);
-                return;
-            }
+                if (chnl == ctx.Guild.AfkChannel)
+                {
+                    await WrongChannel(ctx);
+                    return;
+                }
 
-            dbuser.RemovePoints(pts_to_pay);
+                dbuser.RemovePoints(pts_to_pay);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
             Muting(ctx, user.Mention, ent.Mention, minutes);
             await MuteThread(ent, minutes * 60, ctx.Guild.AfkChannel);
         }
@@ -182,10 +197,11 @@ namespace bot.Cmds
                 if (PrintResponseIfNotRightChannel) await WrongChannel(ctx);
                 return;
             }
+            
+            await using var context = new DiscordContext();
+            var dbuser = context.Users.SingleOrDefault(p => p.DiscordId == (long) ctx.Member.Id);
 
-            var dbuser = DataWrapper.UsersH.GetUser(ctx.Member);
-
-            if (!dbuser.Daily)
+            if (dbuser.IsDailyRedeemed())
             {
                 await DailyAlreadyClaimed(ctx);
                 return;
@@ -193,7 +209,8 @@ namespace bot.Cmds
 
             await DailyClaimed(ctx);
             dbuser.AddPoints(DAILY_AMOUNT);
-            dbuser.Daily = false;
+            dbuser.Daily = true;
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [Command("ranking")]
@@ -207,19 +224,20 @@ namespace bot.Cmds
                 return;
             }
 
-            var users = DataWrapper.HelpForTypes.GetTopUsers();
-
+            await using var context = new DiscordContext();
+            var users = context.Users.OrderByDescending(p => p.Points).Take(5).ToList();
             var embed = new DiscordEmbedBuilder
             {
                 Title = "Ranking punktow"
             };
-
-            for (var i = 0; i < users.Length; i++)
+            for (var i = 0; i < users.Count; i++)
             {
-                var username = await ctx.Guild.GetMemberAsync(users[i].ID).ConfigureAwait(false);
-                embed.AddField($"{i + 1}", $"{username} - `{users[i].Amount}`");
+                Console.WriteLine((ulong) users[i].DiscordId);
+                //var username = await ctx.Guild.GetMemberAsync((ulong) users[i].DiscordId).ConfigureAwait(false);
+                var username = (ulong) users[i].DiscordId;
+                embed.AddField($"{i + 1}", $"{username} - `{(ulong) users[i].Points}`");
             }
-                
+
             await ctx.RespondAsync("", embed: embed);
         }
         
@@ -236,10 +254,12 @@ namespace bot.Cmds
             
             var emoji = DiscordEmoji.FromName(ctx.Client, ":crown:");
             var user = ctx.Member;
+            await using var context = new DiscordContext();
             var embed = new DiscordEmbedBuilder
             {
                 Title = "Miejsce w rankingu",
-                Description = $"{emoji} {user.Mention} w rankingu jest na miejscu {DataWrapper.HelpForTypes.GetPlaceForUser(user)}",
+                Description = $"{emoji} {user.Mention} w rankingu jest na miejscu " +
+                              $"{context.Users.GetUserByDiscordMember(user).PlaceInRanking()}",
                 Color = new DiscordColor(0x228B22)
             };
             embed.WithAuthor(user.Username, null, user.AvatarUrl);
@@ -262,15 +282,13 @@ namespace bot.Cmds
                 await NotOnChannel(ctx);
                 return;
             }
-            var user = DataWrapper.UsersH.GetUser(ctx.Member);
+            await using var context = new DiscordContext();
+            var user = context.Users.GetUserByDiscordMember(ctx.Member);
             if (!user.HasEnough(COST_MOVE))
             {
                 await NotEnoughPts(ctx);
                 return;
             }
-            
-            
-            
         }
 
         [Command("ping")]

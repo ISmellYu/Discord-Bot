@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using bot.Games.BlackJack;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -12,7 +13,7 @@ namespace bot.Cmds
     [Description("Komendy do blacjacka")]
     [Aliases("b")]
     [RequireRoles(RoleCheckMode.Any, "Zweryfikowany")]
-    [Cooldown(1, 1, CooldownBucketType.User)]
+    [Cooldown(1, 2, CooldownBucketType.User)]
     public class BlackJackCmds : BaseCommandModule
     {
         [Command("stworz")]
@@ -23,35 +24,37 @@ namespace bot.Cmds
             int amount)
         {
             if (BlackJack._isRunning || ctx.Member == opponent) return;
-
             if (ctx.Channel.Name != Globals.BLACKJACK_CHANNEL_NAME)
             {
                 if (Globals.PrintResponseIfNotRightChannel) await WrongChannel(ctx);
 
                 return;
             }
-
-
+            
             if (!CheckNumber(amount))
             {
                 await WrongNumber(ctx);
                 return;
             }
 
-            if (!DataWrapper.UsersH.Exists(opponent.Id))
+            await using (var context = new DiscordContext())
             {
-                await UserNotFound(ctx);
-                return;
-            }
+                if (!context.Users.CheckIfExists(opponent))
+                {
+                    await UserNotFound(ctx);
+                    return;
+                }
 
-            var user = DataWrapper.UsersH.GetUser(ctx.Member);
-            if (!user.HasEnough(amount))
-            {
-                await NotEnoughPts(ctx);
-                return;
+                var user = context.Users.GetUserByDiscordMember(ctx.Member);
+                if (!user.HasEnough(amount))
+                {
+                    await NotEnoughPts(ctx);
+                    return;
+                }
+                user.RemovePoints(amount);
+                await context.SaveChangesAsync().ConfigureAwait(false);
             }
-
-            user.RemovePoints(amount);
+            
             new BlackJack(ctx, opponent, amount).Brain();
         }
     }

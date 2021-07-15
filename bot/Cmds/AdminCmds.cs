@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -24,7 +26,9 @@ namespace bot.Cmds
                 return;
             }
 
-            DataWrapper.UsersH.GetUser(ent).ResetPoints();
+            await using var context = new DiscordContext();
+            context.Users.GetUserByUlong(ent.Id).ResetPoints();
+            await context.SaveChangesAsync().ConfigureAwait(false);
 
 
             var emoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
@@ -53,9 +57,11 @@ namespace bot.Cmds
                 await WrongNumber(ctx);
                 return;
             }
-
-            DataWrapper.UsersH.GetUser(ent).AddPoints(pts);
-
+            
+            await using var context = new DiscordContext();
+            context.Users.GetUserByUlong(ent.Id).AddPoints(pts);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            
             var emoji = DiscordEmoji.FromName(ctx.Client, ":plus:");
             var embed = new DiscordEmbedBuilder
             {
@@ -83,7 +89,9 @@ namespace bot.Cmds
                 return;
             }
 
-            DataWrapper.UsersH.GetUser(ent).RemovePoints(pts);
+            await using var context = new DiscordContext();
+            context.Users.GetUserByUlong(ent.Id).RemovePoints(pts);
+            await context.SaveChangesAsync().ConfigureAwait(false);
 
 
             var emoji = DiscordEmoji.FromName(ctx.Client, ":minus:");
