@@ -255,7 +255,7 @@ namespace bot.Games.BlackJack
 
         private async Task<bool> SendMsgReact()
         {
-            await using var context = new DiscordContext();
+            var context = new DiscordContext();
             var DbAuthor = context.Users.GetUserByDiscordMember(ctx.Member);
             var msg = await StartMessage();
 
@@ -263,6 +263,7 @@ namespace bot.Games.BlackJack
 
             try
             {
+                await context.DisposeAsync();
                 var reactionResult = await interactivity.WaitForReactionAsync(
                     p => p.Emoji == _emojiNO || p.Emoji == _emojiOK, msg,
                     _opponent, TimeSpan.FromSeconds(30));
@@ -270,31 +271,38 @@ namespace bot.Games.BlackJack
                 if (reactionResult.Result.Emoji == _emojiNO)
                 {
                     await OpponentDeclined();
+                    context = new DiscordContext();
                     DbAuthor.AddPoints(_amount);
                     await context.SaveChangesAsync().ConfigureAwait(false);
+                    await context.DisposeAsync();
                     return false;
                 }
             }
             catch (NullReferenceException)
             {
                 await OpponentNotJoined();
+                context = new DiscordContext();
                 DbAuthor.AddPoints(_amount);
                 await context.SaveChangesAsync().ConfigureAwait(false);
+                await context.DisposeAsync();
                 return false;
             }
-
+            
+            context = new DiscordContext();
             var dbOpponent = context.Users.GetUserByDiscordMember(_opponent);
             if (!dbOpponent.HasEnough(_amount))
             {
                 await MsgHelper.NotEnoughPts(ctx, _opponent);
                 DbAuthor.AddPoints(_amount);
                 await context.SaveChangesAsync().ConfigureAwait(false);
+                await context.DisposeAsync();
                 return false;
             }
 
             await OpponentAccepted();
             dbOpponent.RemovePoints(_amount);
             await context.SaveChangesAsync().ConfigureAwait(false);
+            await context.DisposeAsync();
             return true;
         }
 
