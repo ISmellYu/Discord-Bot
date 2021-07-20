@@ -10,6 +10,6 @@ namespace bot.Models
         public int RemainingTime { get; set; }
         
         [Required]
-        public DbUser User { get; set; }
+        public virtual DbUser User { get; set; }
     }
 }
