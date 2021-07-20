@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using bot.Games;
 using bot.Helpers;
 using DSharpPlus.Entities;
@@ -34,8 +35,12 @@ namespace bot
         public static bool ENABLE_MOVING = false;
 
         public static Random RND = new();
-
-        public static BetSystem BetsGlobal = new();
+        
+        
+        public static readonly List<ulong> AdminsId = new()
+        {
+            319134452145979393, 359775787693506571
+        };
 
 
     }

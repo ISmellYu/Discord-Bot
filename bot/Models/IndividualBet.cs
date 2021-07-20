@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace bot.Models
 {
@@ -6,13 +7,14 @@ namespace bot.Models
     {
         public int Id { get; set; }
         [Required]
-        public Option Option { get; set; }
+        public string Option { get; set; }
         [Required]
         public int PlacedPoints { get; set; }
         
         [Required]
-        public DbUser User { get; set; }
+        [JsonIgnore]
+        public virtual DbUser User { get; set; }
         [Required]
-        public Bet Bet { get; set; }
+        public virtual Bet Bet { get; set; }
     }
 }
