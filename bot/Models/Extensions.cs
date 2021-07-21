@@ -146,10 +146,15 @@ namespace bot.Models
         {
             return users.GetUserByDiscordMember(member) != null;
         }
-        
-        public static DbUser GetUserByDiscordMember(this DbSet<DbUser> users, DiscordMember member)
+
+        public static DbUser? GetUserByDiscordMember(this DbSet<DbUser> users, DiscordMember member)
         {
             return users.SingleOrDefault(p => p.DiscordId == (long) member.Id);
+        }
+
+        public static void RemoveUser(this DbSet<DbUser> users, DbUser member)
+        {
+            users.Remove(member);
         }
     }
 }

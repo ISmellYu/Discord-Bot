@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using bot.Utility;
 using bot.Cmds;
 using bot.Helpers;
+using bot.Models;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -61,6 +62,7 @@ namespace bot.Run
             // next, let's hook some events, so we know
             // what's going on
             Client.Ready += OnClientReady;
+            Client.GuildMemberRemoved += OnClientLeave;
             Client.GuildAvailable += Client_GuildAvailable;
             Client.ClientErrored += Client_ClientError;
 
@@ -118,6 +120,25 @@ namespace bot.Run
 
         private Task OnClientReady(DiscordClient dc, ReadyEventArgs e)
         {
+            return Task.CompletedTask;
+        }
+        
+        private Task OnClientLeave(DiscordClient dc, GuildMemberRemoveEventArgs e)
+        {
+            // TODO: Manage it to work xD
+            // if (e.Member.Roles.SingleOrDefault(p => p.Id == Globals.ROLE_ID) == null)
+            //     return Task.CompletedTask;
+            //
+            // using (var context = new DiscordContext())
+            // {
+            //     var user = context.Users.GetUserByUlong(e.Member.Id);
+            //     if (user == null)
+            //         return Task.CompletedTask;
+            //     
+            //     context.Users.RemoveUser(user);
+            //     context.SaveChanges();
+            // }
+            
             return Task.CompletedTask;
         }
 

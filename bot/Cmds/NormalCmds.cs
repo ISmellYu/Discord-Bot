@@ -232,10 +232,9 @@ namespace bot.Cmds
             };
             for (var i = 0; i < users.Count; i++)
             {
-                Console.WriteLine((ulong) users[i].DiscordId);
                 //var username = await ctx.Guild.GetMemberAsync((ulong) users[i].DiscordId).ConfigureAwait(false);
-                var username = (ulong) users[i].DiscordId;
-                embed.AddField($"{i + 1}", $"{username} - `{(ulong) users[i].Points}`");
+                var username = users[i].UDiscordId;
+                embed.AddField($"{i + 1}", $"{username} - `{users[i].Points}`");
             }
 
             await ctx.RespondAsync("", embed: embed);

@@ -11,10 +11,6 @@ namespace bot
     {
         private static void Main(string[] args)
         {
-            using (var context = new DiscordContext())
-            {
-                context.Database.EnsureCreated();
-            }
             //if (!Globals.Db.CheckDatabaseIntegrity()) Console.WriteLine("Someting went wrong!");
             var bt = new Bot();
             bt.RunAsync().GetAwaiter().GetResult();
