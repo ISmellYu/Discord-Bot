@@ -233,8 +233,15 @@ namespace bot.Cmds
             for (var i = 0; i < users.Count; i++)
             {
                 //var username = await ctx.Guild.GetMemberAsync((ulong) users[i].DiscordId).ConfigureAwait(false);
-                var username = users[i].UDiscordId;
-                embed.AddField($"{i + 1}", $"{username} - `{users[i].Points}`");
+                try
+                {
+                    var user = await ctx.Guild.GetMemberAsync(users[i].UDiscordId);
+                    embed.AddField($"{i + 1}", $"{user.Username} - `{users[i].Points}`");
+                }
+                catch (DSharpPlus.Exceptions.NotFoundException)
+                {
+                    embed.AddField($"{i + 1}", $"DEZERTER - `{users[i].Points}`");
+                }
             }
 
             await ctx.RespondAsync("", embed: embed);

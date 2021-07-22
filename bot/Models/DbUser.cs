@@ -18,5 +18,8 @@ namespace bot.Models
 
         public int Points { get; set; } = 0;
         public bool Daily { get; set; } = false;
+        
+        [NotMapped]
+        public string? UserName { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace bot.Models
 {
@@ -30,7 +31,7 @@ namespace bot.Models
         //         return context.IndividualBets.GetAllBetsByBetName(Title);
         //     }
         // }
-        
+        [JsonIgnore]
         public virtual IList<IndividualBet> AllPlacedBets { get; set; }
         
         [NotMapped]

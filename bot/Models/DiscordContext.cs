@@ -15,7 +15,7 @@ namespace bot.Models
 #if DEBUG
             optionsBuilder.UseMySQL("server=20.52.55.98;database=test_discord;user=bot;password=YsCSh2LC");
 #else
-            optionsBuilder.UseMySQL("server=localhost;database=test_discord;user=bot;password=YsCSh2LC");
+            optionsBuilder.UseMySQL("server=localhost;database=richbets;user=bot;password=YsCSh2LC");
 #endif
             
             
