@@ -156,5 +156,14 @@ namespace bot.Models
         {
             users.Remove(member);
         }
+
+        public static void AddMuteUser(this DbSet<MuteUser> muteUsers, DbUser user, int remainingTime)
+        {
+            muteUsers.Add(new MuteUser()
+            {
+                RemainingTime = remainingTime,
+                User = user
+            });
+        }
     }
 }

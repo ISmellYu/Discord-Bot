@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using bot.Games;
 using bot.Helpers;
 using DSharpPlus.Entities;
@@ -23,6 +25,8 @@ namespace bot
         public static string ROLE_NAME = "Zwerfikowany";
         public static string ROLE_BOOSTER = "Koksy";
         public static bool PrintResponseIfNotRightChannel = false;
+        public static readonly CancellationTokenSource MUTE_TOKEN = new CancellationTokenSource();
+        public static List<Task> MUTE_TASKS = new List<Task>();
 
 #if !DEBUG
         public static ulong ROLE_ID = 596323688341700639;

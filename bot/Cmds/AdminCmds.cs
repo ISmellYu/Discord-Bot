@@ -123,7 +123,7 @@ namespace bot.Cmds
                 Color = new DiscordColor(0x03fce8)
             };
             await ctx.RespondAsync("", embed: embed);
-            Environment.Exit(1);
+            Functions.SafelyExitBot();
         }
 
         [Command("mute")]

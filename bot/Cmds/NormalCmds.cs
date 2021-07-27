@@ -184,7 +184,9 @@ namespace bot.Cmds
                 await context.SaveChangesAsync().ConfigureAwait(false);
             }
             Muting(ctx, user.Mention, ent.Mention, minutes);
-            await MuteThread(ent, minutes * 60, ctx.Guild.AfkChannel);
+            
+            var task = MuteThread(ent, minutes * 60, ctx.Guild.AfkChannel, MUTE_TOKEN.Token);
+            MUTE_TASKS.Add(task);
         }
 
         [Command("daily")]
