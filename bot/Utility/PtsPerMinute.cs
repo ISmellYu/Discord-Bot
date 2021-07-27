@@ -80,6 +80,60 @@ namespace bot.Utility
             dbUser.AddPoints(isBooster ? pointsToAddBooster : pointsToAdd);
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
+        
+        private static bool? CheckIfSelfDeafened(DiscordMember ent)
+        {
+            try
+            {
+                return ent.VoiceState.IsSelfDeafened;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        private static bool? CheckIfSelfMuted(DiscordMember ent)
+        {
+            try
+            {
+                return ent.VoiceState.IsSelfMuted;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        private static bool? CheckIfGlobalMuted(DiscordMember ent)
+        {
+            try
+            {
+                return ent.VoiceState.IsServerMuted;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private static void Test(DiscordMember ent)
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine($"IsSelfMuted: {CheckIfSelfMuted(ent)}");
+            Console.WriteLine($"IfSelfDeafened: {CheckIfSelfDeafened(ent)}");
+            Console.WriteLine($"IfGlobalMuted: {CheckIfGlobalMuted(ent)}");
+        }
+
+        private static bool? CheckIfAloneOnChannel(DiscordMember ent)
+        {
+            try
+            {
+                return ent.VoiceState.Channel.Users.Count() > 1;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         private class VoiceUser
         {

@@ -17,6 +17,7 @@ namespace bot.Helpers
                     await using var context = new DiscordContext();
                     var users = context.Users;
                     users.ResetAllDaily();
+                    await context.SaveChangesAsync();
                     await Task.Delay(3720000); // 62 minutes
                 }
                 else

@@ -15,8 +15,8 @@ namespace bot
         public static int DAILY_HOUR_RESET = 0;
         public static int ROULETTE_SECONDS = 30;
         public static int PTS_PER_MINUTE_INTERVAL_SECONDS = 60;
-        public static int PTS_PER_MINUTE_AMOUNT = 3;
-        public static int PTS_PER_MINUTE_AMOUNT_BOOSTER = 4;
+        public static int PTS_PER_MINUTE_AMOUNT = 2;
+        public static int PTS_PER_MINUTE_AMOUNT_BOOSTER = 3;
         public static string ROULETTE_CHANNEL_NAME = "ruletka";
         public static string BOT_CHANNEL_NAME = "boty";
         public static string BLACKJACK_CHANNEL_NAME = "blackjack";
