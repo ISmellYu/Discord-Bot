@@ -11,11 +11,10 @@ namespace bot.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
-            //optionsBuilder.UseMySQL("server=localhost;database=discord;user=root;password=bAy8CwdQ");
 #if DEBUG
             optionsBuilder.UseMySQL("server=20.52.55.98;database=test_discord;user=bot;password=YsCSh2LC");
 #else
-            optionsBuilder.UseMySQL("server=localhost;database=richbets;user=bot;password=YsCSh2LC");
+            optionsBuilder.UseMySQL("server=localhost;database=localhost;user=bot;password=localhost");
 #endif
             
             

@@ -46,7 +46,7 @@ namespace bot.Run
                 #if !DEBUG
                 Token = cfgjson.Token,
                 #else
-                Token = "NzEzODYxNjYwMTU4NDU5OTA0.XsmReg.BlVxz0KwTPvIw5WasXY_hvCkK14",
+                Token = "NzEzODYxNjYwMTU4NDU5OTA0.XsmReg.BlVxz0KwTPvIw5WasXY_hvCkK14",  // Expired btw dont try xD
                 #endif
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.All,
